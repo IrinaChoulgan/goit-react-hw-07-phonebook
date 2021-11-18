@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { connect, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import styles from './ContactForm.module.css';
-import actions from '../../redux/actions';
+import operations from '../../redux/operations';
 import { getContacts } from '../../redux/selectors';
 
 const ContactForm = ({ onAdd }) => {
@@ -30,23 +30,17 @@ const ContactForm = ({ onAdd }) => {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    // const contact = {
-    //   name,
-    //   number,
-    //   id: uuid(),
-    // };
-    // addNewContact(contact);
+
     if (
       contacts.find(
         contact => contact.name.toLowerCase() === name.toLowerCase(),
       )
     ) {
       alert(`${name} contact is already on your list`);
-    } else dispatch(actions.addContact(name, number));
+    } else dispatch(operations.addContact(name, number));
 
     setContact(contact);
     resetForm();
-    // onAdd(name, number);
     console.log('ADD ACTIONS', onAdd);
   };
   const resetForm = () => {
@@ -87,16 +81,4 @@ const ContactForm = ({ onAdd }) => {
   );
 };
 
-// const mapStateToProps = state => {
-//   return {
-//     contactList: state.items,
-//   };
-// };
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     onAdd: (name, number) => dispatch(actions.addContact(name, number)),
-//   };
-// };
-
-// export default connect(null, mapDispatchToProps)(ContactForm);
 export default ContactForm;

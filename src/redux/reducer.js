@@ -2,6 +2,19 @@ import { combineReducers } from 'redux';
 import { createReducer } from '@reduxjs/toolkit';
 import actions from './actions';
 
+const {
+  addContactsRequest,
+  addContactsSuccess,
+  addContactsError,
+  deleteContactsRequest,
+  deleteContactsSuccess,
+  deleteContactsError,
+  fetchContactsRequest,
+  fetchContactsSuccess,
+  fetchContactsError,
+  changeFilter,
+} = actions;
+
 const initState = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
@@ -10,39 +23,29 @@ const initState = [
 ];
 
 const items = createReducer(initState, {
-  [actions.addContact]: (state, { payload }) => [...state, payload],
-  [actions.deleteContact]: (state, { payload }) =>
+  [fetchContactsSuccess]: (_, { payload }) => payload,
+  [addContactsSuccess]: (state, { payload }) => [...state, payload],
+  [deleteContactsSuccess]: (state, { payload }) =>
     state.filter(contact => contact.id !== payload),
 });
+
+const loading = createReducer(false, {
+  [addContactsRequest]: () => true,
+  [addContactsSuccess]: () => false,
+  [addContactsError]: () => false,
+  [deleteContactsRequest]: () => true,
+  [deleteContactsSuccess]: () => false,
+  [deleteContactsError]: () => false,
+  [fetchContactsRequest]: () => true,
+  [fetchContactsSuccess]: () => false,
+  [fetchContactsError]: () => false,
+});
 const filter = createReducer('', {
-  [actions.changeFilter]: (_, { payload }) => payload,
+  [changeFilter]: (_, { payload }) => payload,
 });
 
 export default combineReducers({
   items,
   filter,
+  loading,
 });
-
-///////=======REDUX=========
-// const items = (state = initState, { type, payload }) => {
-//   switch (type) {
-//     case types.ADD:
-//       return [...state, payload];
-
-//     case types.DELETE:
-//       return state.filter(contact => contact.id !== payload);
-
-//     default:
-//       return state;
-//   }
-// };
-
-//const filter = (state = '', { type, payload }) => {
-//   switch (type) {
-//     case 'contacts/changeFilter':
-//       return payload;
-
-//     default:
-//       return state;
-//   }
-// };
